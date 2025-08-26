@@ -8,7 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Products from "./pages/Products";
-import FarmVisit from "./pages/FarmVisit";
+import FarmVisit from "./pages/FarmVisits";
 import Blogs from "./pages/Blogs";
 import Order from "./pages/Order";
 import Admin from "./pages/Admin";
