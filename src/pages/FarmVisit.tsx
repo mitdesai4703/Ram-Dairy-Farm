@@ -18,9 +18,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-
 import emailjs from "@emailjs/browser";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 emailjs.init("uOlYLhisecVoVYi76");
 
@@ -48,54 +48,46 @@ const FarmVisit = () => {
     { name: "School Groups", price: "Complementry", duration: "3 hours", includes: ["Educational tour", "Interactive sessions", "Learning materials", "Certificate"] },
   ];
 
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
- 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!selectedPlan) {
-      alert("Please select a plan and click Book Now first.");
+      toast.error("Please select a plan and click Book Now first.");
       return;
     }
 
     const templateParams = {
-  
       from_name: formData.name,
       visitor_email: formData.email,
       phone: formData.phone,
       date: formData.date,
       slot: formData.slot,
       visitType: selectedPlan,
-     
       to_name: "Ram Dairy Farm",
       message: `New booking for ${selectedPlan} on ${formData.date} at ${formData.slot}`,
     };
 
     try {
-      
       const response = await emailjs.send(
-        "service_q3qj7i2",    
-        "template_gezzuv9",  
+        "service_q3qj7i2",
+        "template_gezzuv9",
         templateParams
-        
       );
 
       console.log("EmailJS success:", response);
-      alert("Booking request sent! We will contact you soon.");
+      toast.success("Booking request sent! We will contact you soon.");
       setOpen(false);
       setFormData({ name: "", email: "", phone: "", date: "", slot: "" });
     } catch (err) {
-     
       console.error("EmailJS error:", err);
       let extra = "";
-     
       if (err && err.status) extra += ` (status: ${err.status})`;
       if (err && err.text) extra += ` - ${err.text}`;
-      alert("Something went wrong. Please try again." + extra);
+      toast.error("Something went wrong. Please try again." + extra);
     }
   };
 
@@ -124,7 +116,9 @@ const FarmVisit = () => {
         </div>
       </nav>
 
+    
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+       
         <div className="flex items-center space-x-4 mb-8">
           <Button variant="ghost" asChild>
             <Link to="/">
@@ -143,7 +137,7 @@ const FarmVisit = () => {
           </p>
         </div>
 
-    
+      
         <div className="mb-12">
           <img
             src="https://images.unsplash.com/photo-1517022812141-23620dba5c23?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
@@ -152,7 +146,7 @@ const FarmVisit = () => {
           />
         </div>
 
-      
+       
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">What You'll Experience</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -170,7 +164,7 @@ const FarmVisit = () => {
           </div>
         </div>
 
-       
+      
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Visit Plans</h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -200,7 +194,7 @@ const FarmVisit = () => {
           </div>
         </div>
 
-       
+      
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent>
             <DialogHeader>
@@ -226,26 +220,25 @@ const FarmVisit = () => {
               <div>
                 <Label>Slot</Label>
                 <select
-  name="slot"
-  value={formData.slot}
-  onChange={handleChange}
-  className="w-full border p-2 rounded"
-  required
->
-  <option value="">Select Slot</option>
-  <option value="Morning Milking (6:00 AM - 8:00 AM)">Morning Milking (6:00 AM - 8:00 AM)</option>
-  <option value="Day Visit (8:00 AM - 5:00 PM, Mon-Sat)">Day Visit (8:00 AM - 5:00 PM, Mon-Sat)</option>
-  <option value="Day Visit (9:00 AM - 4:00 PM, Sunday)">Day Visit (9:00 AM - 4:00 PM, Sunday)</option>
-  <option value="Evening Milking (5:00 PM - 7:00 PM)">Evening Milking (5:00 PM - 7:00 PM)</option>
-</select>
-
+                  name="slot"
+                  value={formData.slot}
+                  onChange={handleChange}
+                  className="w-full border p-2 rounded"
+                  required
+                >
+                  <option value="">Select Slot</option>
+                  <option value="Morning Milking (6:00 AM - 8:00 AM)">Morning Milking (6:00 AM - 8:00 AM)</option>
+                  <option value="Day Visit (8:00 AM - 5:00 PM, Mon-Sat)">Day Visit (8:00 AM - 5:00 PM, Mon-Sat)</option>
+                  <option value="Day Visit (9:00 AM - 4:00 PM, Sunday)">Day Visit (9:00 AM - 4:00 PM, Sunday)</option>
+                  <option value="Evening Milking (5:00 PM - 7:00 PM)">Evening Milking (5:00 PM - 7:00 PM)</option>
+                </select>
               </div>
               <Button type="submit" className="w-full bg-green-600">Confirm Booking</Button>
             </form>
           </DialogContent>
         </Dialog>
 
-     
+       
         <div className="bg-white rounded-lg p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Visit Information</h2>
           <div className="grid md:grid-cols-2 gap-8">
@@ -289,6 +282,9 @@ const FarmVisit = () => {
           </div>
         </div>
       </div>
+
+      
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop />
     </div>
   );
 };
